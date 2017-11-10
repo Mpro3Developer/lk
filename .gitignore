@@ -5,6 +5,7 @@ tags
 TAGS
 local.mk
 target/*/tools/mkheader
+.vscode
 
 # cscope files
 cscope.*
