@@ -1,0 +1,9 @@
+This is the entry point from BL1
+Performs ARM specific common intitialization, call board target specific initializations
+
+[_start] Performs:
+
+reset:
+Reset vector table and CP15 processsor initializtion;
+
+

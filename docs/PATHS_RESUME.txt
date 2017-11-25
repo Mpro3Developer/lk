@@ -1,0 +1,19 @@
+-app
+    - 
+-arch [platform specific files for archictecture]
+    - arm [files for start arm archictecture]
+        - crt0.S [entry point from BL1]
+-dev
+-images
+-include
+-kernel
+-lib
+-make
+-platform
+    - msm8916 / msm_shared [contains product specific initialization]
+        - rules.mk [more defines for product]
+-project
+    - contains the product configs for targer build
+-scripts
+-target
+-tools
