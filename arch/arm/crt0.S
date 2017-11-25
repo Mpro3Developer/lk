@@ -73,11 +73,15 @@ reset:
 	/* Not needed when TrustZone is the first bootloader that runs.*/
 	bl __cpu_early_init
 #endif
+
 	/* declare return address as global to avoid using stack */
+	/* this is the return point from __cpu_early_init */
 .globl _cpu_early_init_complete
 	_cpu_early_init_complete:
 
 #endif
+
+/* for MSM8916 / A5LTE continues here */
 
 #if (!ENABLE_NANDWRITE)
 #if WITH_CPU_WARM_BOOT

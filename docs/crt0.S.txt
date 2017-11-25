@@ -1,9 +1,11 @@
-This is the entry point from BL1
+This is the entry point from BL1, after TrustZone initialization
 Performs ARM specific common intitialization, call board target specific initializations
 
 [_start] Performs:
 
 reset:
 Reset vector table and CP15 processsor initializtion;
+Call platform/arch/etc specific init code if TrustZone is not the first bootloader, not the case for MSM8916
+ 
 
 
