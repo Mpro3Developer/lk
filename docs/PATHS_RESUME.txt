@@ -6,7 +6,8 @@
 -dev
 -images
 -include
--kernel
+-kernel [contains kernel api code]
+    - main.c [little kernel entry point]
 -lib
 -make
 -platform
