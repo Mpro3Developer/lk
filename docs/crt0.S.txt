@@ -6,6 +6,8 @@ Performs ARM specific common intitialization, call board target specific initial
 reset:
 Reset vector table and CP15 processsor initializtion;
 Call platform/arch/etc specific init code if TrustZone is not the first bootloader, not the case for MSM8916
- 
+Relocate in RAM the _start code case it is not alocated (??platform/arch/etc can alocate different code in sections??)
+Stack Setup for the handlers states exceptions
+Jump to little kernel main kernel/main.c
 
 

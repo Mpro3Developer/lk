@@ -81,8 +81,6 @@ reset:
 
 #endif
 
-/* for MSM8916 / A5LTE continues here */
-
 #if (!ENABLE_NANDWRITE)
 #if WITH_CPU_WARM_BOOT
 	ldr 	r0, warm_boot_tag
@@ -96,16 +94,18 @@ reset:
 #endif
 #endif
 
+	/* for MSM8916 continues here */
 	/* see if we need to relocate */
 	mov		r0, pc
-	sub		r0, r0, #(.Laddr - _start)
+	sub		r0, r0, #(.Laddr - _start) /* r0 = r0 - (.Laddr - _ start) */
 .Laddr:
 	ldr		r1, =_start
 	cmp		r0, r1
-	beq		.Lstack_setup
+	/* if alocation is ok then continue to stack setup */
+	beq		.Lstack_setup	/* if (r0 == _start)  then branch to .Lstack_setup */
 
 	/* we need to relocate ourselves to the proper spot */
-	ldr		r2, =__data_end	
+	ldr		r2, =__data_end
 
 .Lrelocate_loop:
 	ldr		r3, [r0], #4
@@ -115,7 +115,7 @@ reset:
 
 	/* we're relocated, jump to the right address */
 	ldr		r0, =.Lstack_setup
-	bx		r0
+	bx		r0 /* BX Branch Exchange: stack setup in ARM state */
 
 .ltorg
 #if WITH_CPU_WARM_BOOT
@@ -124,13 +124,19 @@ warm_boot_tag:
 #endif
 
 .Lstack_setup:
+	/* handlers state have you own stack */
+	/* irq : interrupt request */
+	/* fiq : fast interrupt request */
+	/* abort : abort exceptions */
+	/* undefined : undefined instructions exceptions */
+
 	/* set up the stack for irq, fiq, abort, undefined, system/user, and lastly supervisor mode */
-	mrs     r0, cpsr
+	mrs     r0, cpsr /* load in r0 the content from Current Program Status Register */
 	bic     r0, r0, #0x1f
 
 	ldr		r2, =abort_stack_top
 	orr     r1, r0, #0x12 // irq
-	msr     cpsr_c, r1
+	msr     cpsr_c, r1 /* cpsr_c change only the control flag from Current Program Status Register */
 	ldr		r13, =irq_save_spot		/* save a pointer to a temporary dumping spot used during irq delivery */
 	    
 	orr     r1, r0, #0x11 // fiq
@@ -177,12 +183,12 @@ warm_boot_tag:
 	strlt	r2, [r0], #4
 	blt		.L__bss_loop
 
-#ifdef ARM_CPU_CORTEX_A8
+#ifdef ARM_CPU_CORTEX_A8 // not defined for MSM8916
 	DSB
 	ISB
 #endif
 
-	bl		kmain
+	bl		kmain // jump to little kernel
 	b		.
 
 .ltorg
